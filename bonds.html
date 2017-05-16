@@ -1,0 +1,108 @@
+<html>
+	<head>
+		<title>A bond</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="js/three.js"></script>
+		<script src="js/TrackballControls.js"></script>
+		<script>
+			
+
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+			var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+			camera.position.set(0, 0, 100);
+			camera.lookAt(new THREE.Vector3(0, 0, 0));
+			var scene = new THREE.Scene();
+			var controls=new THREE.TrackballControls(camera,renderer.domElement);
+			controls.rotateSpeed=0.5;
+			
+			var f=0;
+			
+			function createBond(rad,x,y,z,h)
+			{
+			/*var geometry = new THREE.CylinderGeometry( 0.25, 0.25, h, 32,1,false,0,2*Math.PI );
+
+			var material = new THREE.MeshBasicMaterial( {color: 0xffff00,transparent:true, opacity:0.7} );
+			var cylinder = new THREE.Mesh( geometry, material );
+*/
+			var geometry = new THREE.Geometry();
+
+			geometry.vertices.push(new THREE.Vector3(x,y,z));
+			//alert("Hey 1",x,y,z);
+			if(f%2==0)
+			{var w=x-h;
+			geometry.vertices.push(new THREE.Vector3(w,y,z));
+
+			}
+			else
+			{var w=y+h;
+			geometry.vertices.push(new THREE.Vector3(x,w,z));
+
+			}
+			f++;
+
+
+			var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({}));
+console.log(line);
+
+
+			var sphereGeom =  new THREE.SphereGeometry( rad,32,32);
+			var texture =new THREE.TextureLoader().load("images/texture.jpg");
+			var blueMaterial = new THREE.MeshBasicMaterial( {map:texture,transparent:true, opacity:0.5} );
+			var sphere = new THREE.Mesh( sphereGeom, blueMaterial );
+			sphere.position.set(x,y,z);
+			sphere.add( line );
+			sphere.rad=rad;sphere.bond=h;
+			/*if(f%2==0)
+			{
+			cylinder.position.set(sphere.position.x,sphere.position.y-h/2,sphere.position.z);
+			sphere.orient='y';
+//alert(f);
+			}
+			else 
+			{
+			cylinder.position.set(sphere.position.x,sphere.position.y,sphere.position.z);
+			sphere.orient='x';
+//alert(f);
+			}
+			f++;*/
+
+			//scene.add( sphere );
+			return sphere;
+			}
+			var initialAtom=createBond(3,0,0,0,20);
+			//console.log(initialAtom);
+			var factorz=initialAtom.position.z;
+			var factory=initialAtom.position.y;
+			var factorx=initialAtom.position.x;
+			
+			var nextAtom=createBond(initialAtom.rad,factorx,factory,factorz,10);
+			initialAtom.add(nextAtom);
+			nextAtom.position.set(factorx-initialAtom.bond,factory,factorz);
+			scene.add(initialAtom);
+
+			
+
+			camera.position.z = 50;
+			var t=0.0;
+
+			var render = function () {
+				requestAnimationFrame( render );
+				controls.update();
+				//initialAtom.rotation.x+=0.1;
+				initialAtom.rotation.z+=0.01;
+				nextAtom.rotation.z+=0.01;
+				renderer.render(scene, camera);
+			}
+		
+
+			render();
+		</script>
+	</body>
+</html>
