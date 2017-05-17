@@ -1,0 +1,85 @@
+<html>
+	<head>
+		<title>Tetrahedral bond</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="js/three.js"></script>
+		<script src="js/TrackballControls.js"></script>
+		<script>
+			
+
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+			var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+			camera.position.set(0, 0, 100);
+			camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+			var scene = new THREE.Scene();
+			var controls=new THREE.TrackballControls(camera,renderer.domElement);
+			controls.rotateSpeed=0.5;
+
+			var geometry1 = new THREE.Geometry();
+			var geometry2 = new THREE.Geometry();
+			var geometry3 = new THREE.Geometry();
+			var material = new THREE.MeshBasicMaterial( {color: 0xffff00,transparent:true, opacity:0.7} );
+			var sphereGeom =  new THREE.SphereGeometry( 1,32,32);
+			var texture =new THREE.TextureLoader().load("images/texture.jpg");
+			var blueMaterial = new THREE.MeshBasicMaterial( {map:texture,transparent:true, opacity:0.75} );
+			var sphere1 = new THREE.Mesh( sphereGeom, blueMaterial );
+			sphere1.position.set(0,0,0);
+			var sphere2 = new THREE.Mesh( sphereGeom, blueMaterial );
+
+			var sphere3 = new THREE.Mesh( sphereGeom, blueMaterial );
+
+			
+
+			geometry1.vertices.push(new THREE.Vector3(0,0,0));
+			geometry1.vertices.push(new THREE.Vector3(30,0,0));
+			var bond1 = new THREE.Line(geometry1, new THREE.LineBasicMaterial({}));
+			bond1.rotation.set( 2*Math.PI/3, 0, 0);
+			/*sphere2.position.set(bond1.position.x,bond1.position.y,bond1.position.z);
+			geometry2.vertices.push(new THREE.Vector3(sphere2.position.x,sphere2.position.y,sphere2.position.z));
+			geometry2.vertices.push(new THREE.Vector3(sphere2.position.x-30,sphere2.position.y,sphere2.position.z));
+			var bond2 = new THREE.Line(geometry2, new THREE.LineBasicMaterial({}));
+			bond2.rotation.set( 2*Math.PI/3, 0, 0);
+			sphere3.position.set(bond2.position.x,bond2.position.y,bond2.position.z);
+			geometry3.vertices.push(new THREE.Vector3(sphere3.position.x,sphere3.position.y,sphere3.position.z));
+			geometry3.vertices.push(new THREE.Vector3(sphere1.position.x,sphere1.position.y,sphere1.position.z));
+			
+			var bond3 = new THREE.Line(geometry3, new THREE.LineBasicMaterial({}));
+
+			//console.log(cylinder1);
+
+			
+
+			
+
+
+			bond1.add( sphere2 );
+			sphere2.add( bond2 );
+			bond2.add( sphere3 );
+			sphere3.add( bond3 );*/
+						sphere1.add( bond1 );
+			scene.add( sphere1 );
+
+			
+
+			camera.position.z = 50;
+			var t=0.0;
+
+			var render = function () {
+				requestAnimationFrame( render );
+				controls.update();
+				renderer.render(scene, camera);
+			}
+		
+
+			render();
+		</script>
+	</body>
+</html>
