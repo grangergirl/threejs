@@ -1,0 +1,77 @@
+<html>
+	<head>
+		<title>Tetrahedral bond</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="js/three.js"></script>
+		<script src="js/TrackballControls.js"></script>
+		<script>
+			
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+			var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
+			camera.position.set(0, 0, 100);
+			camera.lookAt(new THREE.Vector3(0, 0, 0));
+			var scene = new THREE.Scene();
+			var controls=new THREE.TrackballControls(camera,renderer.domElement);
+			controls.rotateSpeed=0.5;
+			var geometry1 = new THREE.Geometry();
+			var geometry2 = new THREE.Geometry();
+			var geometry3 = new THREE.Geometry();
+			var geometry5 = new THREE.Geometry();
+			var geometry6 = new THREE.Geometry();
+			geometry1.vertices.push(new THREE.Vector3(0,0,0));
+			geometry1.vertices.push(new THREE.Vector3(30,0,0));
+			geometry2.vertices.push(new THREE.Vector3(0,0,0));
+			geometry2.vertices.push(new THREE.Vector3(-30,0,0));
+			geometry3.vertices.push(new THREE.Vector3(0,0,0));
+			geometry3.vertices.push(new THREE.Vector3(0,30,0));
+			geometry5.vertices.push(new THREE.Vector3(0,0,0));
+			geometry5.vertices.push(new THREE.Vector3(0,0,30));
+			geometry6.vertices.push(new THREE.Vector3(0,0,0));
+			geometry6.vertices.push(new THREE.Vector3(0,0,-30));
+
+			var material = new THREE.MeshBasicMaterial( {color: 0xffff00,transparent:true, opacity:0.7} );
+			var bond1 = new THREE.Line(geometry1, new THREE.LineBasicMaterial({}));
+			var bond2 = new THREE.Line(geometry2, new THREE.LineBasicMaterial({}));
+			var bond3 = new THREE.Line(geometry3, new THREE.LineBasicMaterial({}));
+			var bond5 = new THREE.Line(geometry5, new THREE.LineBasicMaterial({}));
+			var bond6 = new THREE.Line(geometry6, new THREE.LineBasicMaterial({}));
+
+			console.log(bond1);
+			
+			var sphereGeom =  new THREE.SphereGeometry( 1,32,32);
+			var texture =new THREE.TextureLoader().load("js/texture.jpg");
+			var blueMaterial = new THREE.MeshBasicMaterial( {map:texture,transparent:true, opacity:0.75} );
+			var atom = new THREE.Mesh( sphereGeom, blueMaterial );
+			atom.position.set(0,0,0);
+			//console.log(bond);
+			bond1.rotation.set( 0, 0, -Math.PI/6);
+			bond2.rotation.set( 0, 0, Math.PI/6);
+			bond3.rotation.set( 0, 0, 0);
+	
+			atom.add( bond1 );
+			atom.add( bond2 );
+			atom.add( bond3 );
+			atom.add( bond5 );
+			atom.add( bond6 );
+
+			scene.add( atom );
+			
+			camera.position.z = 50;
+			var t=0.0;
+			var render = function () {
+				requestAnimationFrame( render );
+				controls.update();
+				renderer.render(scene, camera);
+			}
+		
+			render();
+		</script>
+	</body>
+</html>
